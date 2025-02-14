@@ -35,31 +35,42 @@ bash ./script/compute_mem_0.sh; bash ./script/compute_mem_1.sh; bash ./script/co
 The input includes:
 1. `data/cifar_10/train_mix_{nd,uni}_{0.1,0.2,0.5,0.7,1.0}/{0-49999}.npy`
 2. `saved/random/0/42/checkpoint/9.pth` (儲存兩種雜訊完整訓練資料所訓練出來的權重)
-3. `data/random_uni/0.csv` (完整訓練資料的index與label)
-The output is
+3. `data/random_uni/0.csv` (完整訓練資料的index與label)</br>
+
+The output is:
 1. `saved/score_cifar10_mix_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}/{0-9000}.pkl` (memorization scores and memorization matrices, indices and labels)
 
 ## Step4 Visualize the images projected by memorization matrices
 ```shell
 python visualization.py
 ```
-//input:saved/score_cifar10_mix_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}/{0-9000}.pkl,
-        data/random/0.csv,
-//output:saved/vis/{uni,nd}_{0.1,0.2,0.5,0.7,1.0}.pdf  輸出由mem-matrix投影出來的記憶圖片
+The input includes:
+1. `saved/score_cifar10_mix_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}/{0-9000}.pkl`
+2. `data/random/0.csv`
+The output is:
+1. `saved/vis/{uni,nd}_{0.1,0.2,0.5,0.7,1.0}.pdf` (輸出由mem-matrix投影出來的記憶圖片)
 
-Step5 將記憶由高到低移除百分之10-50,輸出其index與label
+## Step5 將記憶由高到低移除百分之10-50,輸出其index與label
+```shell
 python exclude_top-k.py
-//input:"saved/score_cifar10_mix_{uni,nd}_0/{0-9000}.pkl"  
-//output: "data/{mem_uni,mem_nd}/{0,10,20,30,40,50}.pkl",# remove top-k highest influence score
-          "data/random/{0,10,20,30,40,50}.pkl",
+```
+The input is:
+1. `"saved/score_cifar10_mix_{uni,nd}_0/{0-9000}.pkl`
+The output includes
+1. `data/{mem_uni,mem_nd}/{0,10,20,30,40,50}.pkl` (remove top-k highest influence score)
+2. `data/random/{0,10,20,30,40,50}.pkl`
 
-Step6 消融測試依照記憶高低移除以及依照隨機移除資料的訓練
-bash ./script/train_exc_mem_{0,10,20,30,40,50}.sh 
-//input:data/cifar_10/train ,
-        data/{mem_uni,mem_nd}/{0,10,20,30,40,50}.csv,
-        data/random/0.csv
-//output:saved/{mem_uni,mem_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/checkpoint/  #checkpoint of the single layer, 
-        saved/{mem_uni,mem_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/  #report accuracy
+## Step6 消融測試依照記憶高低移除以及依照隨機移除資料的訓練
+```shell
+bash ./script/train_exc_mem_{0,10,20,30,40,50}.sh
+```
+The input include:
+1. `data/cifar_10/train`
+2. `data/{mem_uni,mem_nd}/{0,10,20,30,40,50}.csv`
+3. `data/random/0.csv`
+The output includes:
+1. `saved/{mem_uni,mem_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/checkpoint/`  (checkpoint of the single layer)
+2. `saved/{mem_uni,mem_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/`  (report accuracy)
 
 bash ./script/train_exc_rand_{0,10,20,30,40,50}.sh  
 //input:data/cifar_10/train ,
@@ -67,13 +78,13 @@ bash ./script/train_exc_rand_{0,10,20,30,40,50}.sh
 //output:saved/{random_uni,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/checkpoint/  #checkpoint of the single layer, 
         saved/{random_uni,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/  #report training data accuracy
 
-Step7 將測試圖片取特徵後,對其進行辨識得到正確率
+## Step7 將測試圖片取特徵後,對其進行辨識得到正確率
 bash ./script/test_{uni,nd}_x.sh (x= 0,10,20,30,40,50)
 //input:data/cifar_10/test_{uni,nd}_{0,0.1,0.2,0.5,0.7,1.0}
         saved/{mem_uni,random_uni,mem_nd,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/checkpoint/9.th
 //output: saved/{mem_uni,random_uni,mem_nd,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/9_test_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}  #report test data accuracy
 
-Step8 兩種雜訊及不同雜訊強度的消融測試折線圖
+## Step8 兩種雜訊及不同雜訊強度的消融測試折線圖
 python abtest_visual.py
 //input:saved/score_cifar10_mix_{uni,nd}_{0,0.1,0.2,0.5,0.7,1.0}/{0-9000}.pkl 
         saved/{mem_uni,mem_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/9_test_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}  #report test data accuracy by the checkpoint trained with removing top-k memorization score data
