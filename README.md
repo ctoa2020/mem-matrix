@@ -18,25 +18,31 @@ The output includes:
 CUDA_VISIBLE_DEVICES=0 python -u train.py --SEED=42 --SAVE_CHECKPOINT=True
 ```
 The input includes:
-1. `data/cifar_10/train,train_mix_{nd,uni}_{0.1,0.2,0.5,0.7,1.0}/{0-49999}.npy`
-2. `data/random/0.csv`</br>
+1. `data/cifar_10/train,train_mix_{nd,uni}_{0.1,0.2,0.5,0.7,1.0}/{0-49999}.npy`</br>
+(training feature images mixed with noise of various types and intensities)
+2. `data/random/0.csv` (indices and labels of orginal data) </br>
 
 The output includes：
 1. `saved/random/0/42/checkpoint{0-9}.pth` (model weights)
 2. `saved/random/0/42/report/{0-9}_train_dev.csv`（train accuracy）
 3. `saved/random/0/42/report/9_test.csv` (test accuracy)
 
-Step3 計算記憶分數及記憶矩陣
-以四張gpu平行執行為例,同時執行
+## Step3 Compute memorization scores and memorization matrix
+Using multiple GPUs for computations (for example: using 4 GPUs)
+```shell
 bash ./script/compute_mem_0.sh; bash ./script/compute_mem_1.sh; bash ./script/compute_mem_2.sh; bash ./script/compute_mem_3.sh
-//input:data/cifar_10/train_mix_{nd,uni}_{0.1,0.2,0.5,0.7,1.0}/{0-49999}.npy
-        saved/random/0/42/checkpoint/9.pth, 儲存兩種雜訊完整訓練資料所訓練出來的權重
-        data/random_uni/0.csv, 完整訓練資料的index與label
+```
+The input includes:
+1. `data/cifar_10/train_mix_{nd,uni}_{0.1,0.2,0.5,0.7,1.0}/{0-49999}.npy`
+2. `saved/random/0/42/checkpoint/9.pth` (儲存兩種雜訊完整訓練資料所訓練出來的權重)
+3. `data/random_uni/0.csv` (完整訓練資料的index與label)
+The output is
+1. `saved/score_cifar10_mix_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}/{0-9000}.pkl` (memorization scores and memorization matrices, indices and labels)
 
-//output:saved/score_cifar10_mix_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}/{0-9000}.pkl, #mem scores and mem matrix (0-1000 ,1001-2000,......), indices, labels
-
-Step4 視覺化圖片記憶
+## Step4 Visualize the images projected by memorization matrices
+```shell
 python visualization.py
+```
 //input:saved/score_cifar10_mix_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}/{0-9000}.pkl,
         data/random/0.csv,
 //output:saved/vis/{uni,nd}_{0.1,0.2,0.5,0.7,1.0}.pdf  輸出由mem-matrix投影出來的記憶圖片
