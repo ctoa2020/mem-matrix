@@ -1,4 +1,4 @@
-## Step1: To extract feature images, execute the following instructions.
+## Step1: To extract feature images from the upstream model(by default, ResNet-50), execute the following instructions.
 ```shell
 python feature_extraction.py
 ```
@@ -13,13 +13,18 @@ The output includes:
 6. `data/cifar_10/test_mix_{nd,uni}_{0.1,0.2,0.5,0.7,1.0}/{0-9999}.npy` </br>
    (testing feature images mixed with noise of various types and intensities)
 
-Step2: 訓練下游的單層網路
+## Step2: Train the downstream model(a single-layer fully-connected network)
+```shell
 CUDA_VISIBLE_DEVICES=0 python -u train.py --SEED=42 --SAVE_CHECKPOINT=True
-輸入：data/cifar_10/train,train_mix_{nd,uni}_{0.1,0.2,0.5,0.7,1.0}
-data/random/0.csv
-輸出：saved/random/0/42/checkpoint{0-9}.pth,(訓練各輪權重)
-         saved/random/0/42/report/{0-9}_train_dev.csv,（訓練集正確率）
-         saved/random/0/42/report/9_test.csv （測試集正確率）
+```
+The input includes:
+1. `data/cifar_10/train,train_mix_{nd,uni}_{0.1,0.2,0.5,0.7,1.0}/{0-49999}.npy`
+2. `data/random/0.csv`</br>
+
+The output includes：
+1. `saved/random/0/42/checkpoint{0-9}.pth` (model weights)
+2. `saved/random/0/42/report/{0-9}_train_dev.csv`（train accuracy）
+3. `saved/random/0/42/report/9_test.csv` (test accuracy)
 
 Step3 計算記憶分數及記憶矩陣
 以四張gpu平行執行為例,同時執行
