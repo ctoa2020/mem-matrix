@@ -46,9 +46,10 @@ python visualization.py
 ```
 The input includes:
 1. `saved/score_cifar10_mix_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}/{0-9000}.pkl`
-2. `data/random/0.csv` (indices and labels of training data)
+2. `data/random/0.csv` (indices and labels of training data) </br>
+
 The output is:
-1. `saved/vis/{uni,nd}_{0.1,0.2,0.5,0.7,1.0}.pdf` (output and save the image visualizations projected by memorization matrices)
+1. `saved/vis/{uni,nd}_{0.1,0.2,0.5,0.7,1.0}.pdf` (the image visualizations projected by memorization matrices)
 
 ## Step5 Exclude the training data with top-k high memorization scores
 ```shell
@@ -79,7 +80,8 @@ bash ./script/train_exc_rand_{0,10,20,30,40,50}.sh
 ```
 The input includes:
 1. `data/cifar_10/train`
-2. `data/random/{0,10,20,30,40,50}.csv` </br>
+2. `data/random/{0,10,20,30,40,50}.csv`
+3. `data/random/0.csv` </br>
 
 The output includes:
 1. `saved/{random_uni,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/checkpoint/`  (various checkpoints of the downstream model)
@@ -102,8 +104,11 @@ python abtest_visual.py
 ```
 The input includes:
 1. `saved/score_cifar10_mix_{uni,nd}_{0,0.1,0.2,0.5,0.7,1.0}/{0-9000}.pkl`
-2. `saved/{mem_uni,mem_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/9_test_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}`  (report test data accuracy by the checkpoint trained with removing top-k memorization score data)
-3. `saved/{random_uni,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/9_test_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}` (report test data accuracy by the checkpoint trained with removing random-k data) </br>
+2. `saved/{mem_uni,mem_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/9_test_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}`</br>
+   (report test data accuracy by the checkpoint trained with removing top-k memorization score data)
+4. `saved/{random_uni,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/9_test_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}` </br>
+   (report test data accuracy by the checkpoint trained with removing random-k data)
 
 The output includes:
-1. `saved/vis/abtest_CIFAR_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}.pdf`
+1. `saved/vis/abtest_CIFAR_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}.pdf`</br>
+(the performance diagrams of ablation test for two noise types and various noise intensities)
