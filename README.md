@@ -50,17 +50,17 @@ The input includes:
 The output is:
 1. `saved/vis/{uni,nd}_{0.1,0.2,0.5,0.7,1.0}.pdf` (輸出由mem-matrix投影出來的記憶圖片)
 
-## Step5 將記憶由高到低移除百分之10-50,輸出其index與label
+## Step5 Exclude training data with top-k high memorization scores
 ```shell
 python exclude_top-k.py
 ```
 The input is:
 1. `"saved/score_cifar10_mix_{uni,nd}_0/{0-9000}.pkl`
 The output includes
-1. `data/{mem_uni,mem_nd}/{0,10,20,30,40,50}.pkl` (remove top-k highest influence score)
-2. `data/random/{0,10,20,30,40,50}.pkl`
+1. `data/{mem_uni,mem_nd}/{0,10,20,30,40,50}.pkl` (excluding training data with top-k highest memorization scores)
+2. `data/random/{0,10,20,30,40,50}.pkl` (excluding random-k portions of training data)
 
-## Step6 消融測試依照記憶高低移除以及依照隨機移除資料的訓練
+## Step6.1 Ablation test: Train the downstream model with the remaining training data after excluding top-k highest memorization scores
 ```shell
 bash ./script/train_exc_mem_{0,10,20,30,40,50}.sh
 ```
@@ -70,9 +70,10 @@ The input include:
 3. `data/random/0.csv` </br>
 
 The output includes:
-1. `saved/{mem_uni,mem_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/checkpoint/`  (checkpoint of the single layer)
-2. `saved/{mem_uni,mem_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/`  (report accuracy)
+1. `saved/{mem_uni,mem_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/checkpoint/`  (various checkpoints of the downstream model)
+2. `saved/{mem_uni,mem_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/`  (report training accuracies)
 
+## Step6.2 Ablation test: Train the downstream model with the remaining training data after excluding the random-k portions of data
 ```shell
 bash ./script/train_exc_rand_{0,10,20,30,40,50}.sh
 ```
@@ -81,10 +82,10 @@ The input includes:
 2. `data/random/{0,10,20,30,40,50}.csv` </br>
 
 The output includes:
-1. `saved/{random_uni,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/checkpoint/`  (checkpoint of the single layer)
-2. `saved/{random_uni,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/`  (report training data accuracy)
+1. `saved/{random_uni,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/checkpoint/`  (various checkpoints of the downstream model)
+2. `saved/{random_uni,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/`  (report train accuracies)
 
-## Step7 將測試圖片取特徵後,對其進行辨識得到正確率
+## Step7 Using the model checkpoints in Step 6.1 and 6.2 to classify testing data
 ```shell
 bash ./script/test_{uni,nd}_x.sh (x= 0,10,20,30,40,50)
 ```
@@ -93,7 +94,7 @@ The input includes:
 2. `saved/{mem_uni,random_uni,mem_nd,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/checkpoint/9.th` </br>
 
 The output includes:
-1. `saved/{mem_uni,random_uni,mem_nd,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/9_test_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}`  #report test data accuracy
+1. `saved/{mem_uni,random_uni,mem_nd,random_nd}/{0,10,20,30,40,50}/{0,1,2,3,42}/report/9_test_{uni,nd}_{0.1,0.2,0.5,0.7,1.0}`  (report test accuracy)
 
 ## Step8 兩種雜訊及不同雜訊強度的消融測試折線圖
 ```shell
