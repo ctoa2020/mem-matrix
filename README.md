@@ -1,3 +1,10 @@
+# An Explanable  Sheme for Memorization of Noisy Instances by Downstream Evaluation
+
+## Installation
+```shell
+pip install -r requirement.txt
+```
+
 ## Step1: To extract feature images from the upstream model(by default, ResNet-50), execute the following instructions.
 ```shell
 python feature_extraction.py
