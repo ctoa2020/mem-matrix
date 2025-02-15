@@ -17,7 +17,6 @@ class CustomModel(nn.Module):
         features = torch.mean(features, -1) # (bs, 512, 7)
         features = torch.mean(features, -1) # (bs, 512)
         ####
-        #8/27
         #features = self.pre_classifier(features) # (bs, 512)
         #features = self.relu(features)  # (bs, dim)
 
