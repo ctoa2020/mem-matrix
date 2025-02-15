@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
 import argparse
 
 
-# +
 def parse_opt():
     parser = argparse.ArgumentParser()
 
@@ -46,7 +44,6 @@ def parse_opt():
     return args
 
 
-# +
 def parse_opt_if_attr():
     parser = argparse.ArgumentParser()
 
@@ -102,10 +99,6 @@ def parse_opt_if_attr():
     return args
 
 
-# -
-
-
-# +
 def parse_opt_if():
     parser = argparse.ArgumentParser()
 
@@ -160,8 +153,3 @@ def parse_opt_if():
     args = parser.parse_args()
 
     return args
-
-# -
-
-
-
