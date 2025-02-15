@@ -2,6 +2,8 @@
 
 <img src="https://github.com/user-attachments/assets/4d186a50-cbb2-474a-bbb0-52bfa5a41c7d" alt="Alt Text" style="width:200%; height:auto;">
 
+## This study introduces a memorization method that provides model explainability when learning from noisy data. The approach allows for a detailed examination of what a pre-trained model learns and memorizes by evaluating the memorization matrices in a downstream model. 
+
 ## Installation
 ```shell
 pip install -r requirement.txt
