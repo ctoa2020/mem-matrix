@@ -1,56 +1,31 @@
-# -*- coding: utf-8 -*-
 import os
-
-
 import config
-
 import random
 import numpy as np
 import pandas as pd
-pd.set_option('max_colwidth', 256)
-
-# +
 import matplotlib.pyplot as plt
 from IPython.display import set_matplotlib_formats
-
-# %matplotlib inline
-#hsun test
 import matplotlib_inline
-matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
-#plt.rcParams['figure.dpi']=150
-
-#set_matplotlib_formats('svg')
-# -
-
-
 import time
 import torch
 from torch import nn
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
-
-# +
 import torchvision
 import torchvision.transforms as transforms
 import torchvision.transforms.functional as TF
-
 from torchvision import models
-# -
-
-
-
 from tqdm import tqdm
 from sklearn.metrics import classification_report
-
 import pickle
 from contexttimer import Timer
-
 from model import CustomModel
 from dataset import CustomDataset
 
-#hsun test
-#os.environ['CUDA_VISIBLE_DEVICES']='0'
 
+pd.set_option('max_colwidth', 256)
+
+matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
 
 def set_seeds(seed):
     random.seed(seed)
@@ -58,8 +33,6 @@ def set_seeds(seed):
     torch.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
-
-
 
 def compute_s(model,
               v,
@@ -100,10 +73,6 @@ def compute_s(model,
             if i > num_samples: # should be i>=(num_samples-1) but does not matters
                 break
                 
-    # References:
-    # https://github.com/kohpangwei/influence-release/blob/master/influence/genericNeuralNet.py#L475
-    # Do this for each iteration of estimation
-    # Since we use one estimation, we put this at the end
     inverse_hvp = [X / scale for X in last_estimate]
     
     return inverse_hvp
@@ -132,7 +101,7 @@ def compute_hessian_vector_products(model,
                 if param.requires_grad], 
         create_graph=True)
     ####
-#     model.zero_grad()
+    #model.zero_grad()
     grad_grad_tuple = torch.autograd.grad(
         outputs=grad_tuple,
         inputs=[param for name, param in model.named_parameters() 
@@ -144,8 +113,6 @@ def compute_hessian_vector_products(model,
     return grad_grad_tuple
 
 
-
-# +
 if __name__ == '__main__':
     opt = config.parse_opt_if_attr()
     print(opt)
@@ -190,13 +157,13 @@ if __name__ == '__main__':
     #train_dev_dataset = CustomDataset(data=train_dev, root=f'./data_stl10/stl10/train_{opt.BETA}/')
     train_dev_dataloader = DataLoader(train_dev_dataset, batch_size=1,
                                                shuffle=False, 
-#                                                pin_memory=True, 
+                                               #pin_memory=True, 
                                                num_workers=0)
     '''
     dev_dataset = CustomDataset(dev, root=f'./data/cifar_100/train_{opt.BETA}/')
     dev_dataloader = DataLoader(dev_dataset, batch_size=opt.TEST_BATCH_SIZE, 
                                          shuffle=False, 
-#                                          pin_memory=True, 
+                                         #pin_memory=True, 
                                          num_workers=0)
     '''
     ####
@@ -270,11 +237,11 @@ if __name__ == '__main__':
         prob = F.softmax(outputs, dim=-1)
         prediction = torch.argmax(prob, dim=1)
         
-#         if prediction==z_labels:
-#             continue
+        #if prediction==z_labels:
+            #continue
             
         prob_gt = torch.gather(prob, 1, z_labels.unsqueeze(1))
-    #    print(f'prob_gt={prob_gt}')
+        #print(f'prob_gt={prob_gt}')
     ####    
         model.zero_grad()
 
@@ -289,7 +256,7 @@ if __name__ == '__main__':
                 train_dataloader = DataLoader(train_dataset, 
                                               batch_size=1, 
                                               shuffle=True, 
-#                                               pin_memory=True,
+                                              #pin_memory=True,
                                               num_workers=0)
             ####
                 s = compute_s(model=model,
@@ -326,13 +293,13 @@ if __name__ == '__main__':
             ####
                 model.zero_grad()          
 
-#hsun marked z,z_test
+
                 grad_tuple_ = torch.autograd.grad(outputs=ce_loss_gt+z_hack_loss, 
                                                   inputs=[param for name, param in model.named_parameters() 
                                                           if param.requires_grad],
                                                   create_graph=True)   
             
-    #             model.zero_grad()
+                #model.zero_grad()
                 my_s = nn.utils.parameters_to_vector(s).detach()
                 #my_grad_tuple_ = nn.utils.parameters_to_vector(grad_tuple_)
                 dot = nn.utils.parameters_to_vector(s).detach() @ nn.utils.parameters_to_vector(grad_tuple_) # scalar
@@ -406,7 +373,6 @@ if __name__ == '__main__':
             break
 
 
-# +
 #beta for saving files
 #dataset = 'cifar100'
 
@@ -415,7 +381,6 @@ os.makedirs(os.path.dirname(filename), exist_ok=True)
 
 with open(filename, "wb") as handle:
     pickle.dump(output_collections, handle) 
-# -
 
 
 
