@@ -5,14 +5,9 @@ import config
 import random
 import numpy as np
 import pandas as pd
-pd.set_option('max_colwidth', 256)
-
 import matplotlib.pyplot as plt
 from IPython.display import set_matplotlib_formats
-
 import matplotlib_inline
-matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
-
 import time
 import torch
 from torch import nn
@@ -29,6 +24,10 @@ import pickle
 from contexttimer import Timer
 from model import CustomModel
 from dataset import CustomDataset
+
+pd.set_option('max_colwidth', 256)
+
+matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
 
 #hsun test
 #os.environ['CUDA_VISIBLE_DEVICES']='0'
