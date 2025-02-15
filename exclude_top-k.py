@@ -1,99 +1,41 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-
-
-
 import os
-
-
-
-
-
 import pickle
-
-
-
+import torch
+import torch.nn as nn
+from torch.nn import functional as F
+from torch.utils.data import Dataset
+import random
+import numpy as np
+import pandas as pd
+import csv
+import matplotlib.pyplot as plt
+from IPython.display import set_matplotlib_formats
+import matplotlib_inline
+from tqdm import tqdm
+from sklearn.metrics import classification_report
+from sklearn.metrics import mean_squared_error
+from scipy import stats
 
 
 random_seed = 42
-
-
-
-
-import random
 random.seed(random_seed)
-import numpy as np
 np.random.seed(random_seed)
 
-import pandas as pd
 pd.set_option('display.max_rows', 512)
 pd.set_option('display.max_columns', 512)
 pd.set_option('display.max_colwidth', None)
 
-
-
-
-
-import csv
-
-
-
-
-
-import matplotlib.pyplot as plt
-from IPython.display import set_matplotlib_formats
-
-import matplotlib_inline
 matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
 #get_ipython().run_line_magic('matplotlib', 'inline')
 #set_matplotlib_formats('svg')
-
-
-
-
-
-import torch
-import torch.nn as nn
-from torch.nn import functional as F
-
-from torch.utils.data import Dataset
-
-
-
-
 
 torch.manual_seed(random_seed)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
 
-
-
-
-from tqdm import tqdm
-
-
-
-
-
-from sklearn.metrics import classification_report
-from sklearn.metrics import mean_squared_error
-
-
-
-
-
-from scipy import stats
-
-
-
-
 def get_prob(label, prob):
     return prob[label]
-
-
-
 
 output_collections_list = []
 for idx in range(0, 7500+1, 2500):
@@ -107,10 +49,6 @@ for idx in range(0, 7500+1, 2500):
     else:
         output_collections_list += output_collections
 len(output_collections_list)        
-
-
-
-
 
 data = []
 for i in output_collections_list:
@@ -131,42 +69,21 @@ df_0 = pd.DataFrame(data, columns=['cifar_index', 'prob', 'label', 'prediction',
 df_0['theta'] = -df_0['theta']
 df_0['attributions'] = -df_0['attributions']
 
-
-
 df_0['rank'] = df_0['influence'].rank(method='first', ascending=False)
-
-
 
 mean_squared_error(df_0['influence'], df_0['theta'])**0.5
 
-
-
 df_0['influence_prime'].plot.hist()
-
-
-
-
 
 df_0['influence'].plot.hist()
 
-
-
-
-
 df_0['theta'].plot.hist()
-
-
-
-
-
 
 drop_index = df_0[df_0['influence']<=0].index
 len(drop_index)
 
 
 df_0.loc[drop_index, 'influence'] = 0.0
-
-
 
 
 def post_process(theta, attributions):
@@ -176,31 +93,14 @@ def post_process(theta, attributions):
         return np.zeros(attributions.shape)
 
 
-
-
-
 df_0['attributions'] = df_0.apply(lambda x: post_process(x['theta'], x['attributions']), axis=1)
-
-
-
-
 
 drop_index = df_0[df_0['theta']<=0].index
 len(drop_index)
 
-
-
-
-
 df_0.loc[drop_index, 'theta'] = 0.0
 
-
-
-
-
 df_0.head()
-
-
 
 df_0['rank'].head()
 
@@ -211,15 +111,10 @@ for i in range(0, 100, 10):
     print(k)
     mem_list.append(df_0[df_0['rank']==k+1]['influence'].values[0])
 
-
-
-
-
 df_0_sorted = df_0.sort_values(by=['influence'], ascending=False) 
 df_0_sorted[['cifar_index', 'label', 'prediction', 'prob', 'influence', 
              'rank'
             ]].head()
-
 
 np.random.seed(random_seed)
 
@@ -240,13 +135,9 @@ for percentage in range(10, 100, 10):
     tmp[['cifar_index', 'label']].to_csv(filename, index=False)
 
 
-
 def get_random_attribution(attributions):
             
     return np.random.rand(7, 7)     
-
-
-
 
 def get_mask(percentage, attributions):
     
@@ -273,20 +164,11 @@ def get_mask(percentage, attributions):
 
 
 
-
 df_attr = df_0_sorted.head(1000).copy()
-
-
-
 
 df_attr.head()
 
-
-
-
 df_attr['label'].value_counts()
-
-
 
 for percentage in range(0, 100, 10):
     print(percentage)
@@ -298,8 +180,6 @@ for percentage in range(0, 100, 10):
     
     with open(filename, "wb") as handle:
         pickle.dump(df_attr['mask'].values.tolist(), handle)  
-
-
 
 '''
 np.random.seed(0)
@@ -315,10 +195,6 @@ for percentage in range(0, 100, 10):
     
     with open(filename, "wb") as handle:
         pickle.dump(df_attr['mask'].values.tolist(), handle)  
-
-
-
-
 
 np.random.seed(2)
 df_attr['random_attributions'] = df_attr.apply(lambda x: get_random_attribution(x['attributions']), axis=1)
