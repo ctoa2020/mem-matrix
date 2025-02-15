@@ -54,7 +54,6 @@ def compute_s(model,
                                                             inputs=inputs,
                                                            )
             # Recursively caclulate h_estimate
-            # https://github.com/dedeswim/pytorch_influence_functions/blob/master/pytorch_influence_functions/influence_functions/hvp_grad.py#L118
             with torch.no_grad():
                 new_estimate = [
                     a + (1 - damp) * b - c / scale 
