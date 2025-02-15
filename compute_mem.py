@@ -292,7 +292,6 @@ if __name__ == '__main__':
             ####
                 model.zero_grad()          
 
-
                 grad_tuple_ = torch.autograd.grad(outputs=ce_loss_gt+z_hack_loss, 
                                                   inputs=[param for name, param in model.named_parameters() 
                                                           if param.requires_grad],
