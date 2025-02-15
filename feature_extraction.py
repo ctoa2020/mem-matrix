@@ -1,64 +1,32 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-
-
-
 import os
+import torch
+import torch.nn as nn
+from torch.nn import functional as F
+import torchvision
+import torchvision.transforms as transforms
+import torchvision.transforms.functional as TF
+from torchvision import models
+import pickle
+import random
+import numpy as np
+import pandas as pd
 
 from PIL import Image
-
-#from cifar.search_picture import noise_input
+import matplotlib.pyplot as plt
+import matplotlib_inline
+matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"   
 os.environ["CUDA_VISIBLE_DEVICES"]='0'
 
 random_seed = 42
-
-
-import pickle
-
-
-import random
 random.seed(random_seed)
-import numpy as np
 np.random.seed(random_seed)
-import pandas as pd
 pd.set_option('max_colwidth', 256)
-
-
-import matplotlib.pyplot as plt
-
-
-import matplotlib_inline
-matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
-
-
-
-
-
-
-import torch
-import torch.nn as nn
-from torch.nn import functional as F
-
-
-
-
 
 torch.manual_seed(random_seed)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-
-
-
-
-
-import torchvision
-import torchvision.transforms as transforms
-import torchvision.transforms.functional as TF
-
-from torchvision import models
 
 input_size = 224
 
@@ -107,14 +75,7 @@ net.eval()
 
 print('done')
 
-
-
-
-
 from tqdm import tqdm
-
-
-
 
 random.seed(42)
 np.random.seed(42)
@@ -122,9 +83,6 @@ np.random.seed(42)
 torch.cuda.amp.autocast(enabled=False)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-
-
-#hsun
 
 
 #modified by hsun 20240909
