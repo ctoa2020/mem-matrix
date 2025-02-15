@@ -1,5 +1,7 @@
 # An Explanable  Sheme for Memorization of Noisy Instances by Downstream Evaluation
 
+<img src="https://github.com/user-attachments/assets/4d186a50-cbb2-474a-bbb0-52bfa5a41c7d" alt="Alt Text" style="width:200%; height:auto;">
+
 ## Installation
 ```shell
 pip install -r requirement.txt
