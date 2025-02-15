@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-
-
 import config
 
 import random
@@ -9,19 +7,11 @@ import numpy as np
 import pandas as pd
 pd.set_option('max_colwidth', 256)
 
-# +
 import matplotlib.pyplot as plt
 from IPython.display import set_matplotlib_formats
 
-# %matplotlib inline
-#hsun test
 import matplotlib_inline
 matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
-#plt.rcParams['figure.dpi']=150
-
-#set_matplotlib_formats('svg')
-# -
-
 
 import time
 import torch
@@ -29,28 +19,19 @@ from torch import nn
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 
-# +
 import torchvision
+from torchvision import models
 import torchvision.transforms as transforms
 import torchvision.transforms.functional as TF
-
-from torchvision import models
-# -
-
-
-
 from tqdm import tqdm
 from sklearn.metrics import classification_report
-
 import pickle
 from contexttimer import Timer
-
 from model import CustomModel
 from dataset import CustomDataset
 
 #hsun test
 #os.environ['CUDA_VISIBLE_DEVICES']='0'
-
 
 def set_seeds(seed):
     random.seed(seed)
