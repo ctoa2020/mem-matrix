@@ -28,16 +28,9 @@ pd.set_option('display.max_rows', 512)
 pd.set_option('display.max_columns', 512)
 pd.set_option('display.max_colwidth', None)
 
-
-
 torch.manual_seed(random_seed)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-
-
-
-
-
 
 beta = 1.0
 
@@ -54,9 +47,6 @@ for idx in range(0, 5400+1, 1800):
         output_collections_list += output_collections
 len(output_collections_list)        
 
-
-
-
 data = []
 for i in output_collections_list:
     data.append([i['index'], i['prob'], i['label'], i['prediction'],
@@ -72,45 +62,25 @@ df_0 = pd.DataFrame(data, columns=['cifar_index', 'prob', 'label', 'prediction',
                                   ])
 
 
-
 df_0['theta'] = -df_0['theta']
 df_0['attributions'] = -df_0['attributions']
-
-
-
 
 
 drop_index = df_0[df_0['influence']<=0].index
 len(drop_index)
 
 
-
-
-
 df_0.loc[drop_index, 'influence'] = 0.0
-
-
-
-
 
 df_0['rank'] = df_0['influence'].rank(method='first', ascending=False)
 
-
-
-
-
 df_0['rank'].head()
-
-
 
 mem_list = []
 for i in range(0, 100, 10):
     k = int(len(df_0)*i/100)
     print(k)
     mem_list.append(df_0[df_0['rank']==k+1]['influence'].values[0])
-
-
-
 
 
 def read_report(output_path, order, percentage, seed, epoch, split):
@@ -125,8 +95,6 @@ for seed in [0, 1, 2, 3, 42]:
 original
 
 
-
-
 percentage_list = [
     10, 
     20, 
@@ -134,7 +102,6 @@ percentage_list = [
     40, 
     50
 ]
-
 
 
 result_dict = {}
@@ -278,8 +245,6 @@ plt.savefig(filename, bbox_inches='tight', pad_inches=0.1)
 
 
 '''
-
-
 
 result_dict = {}
 
