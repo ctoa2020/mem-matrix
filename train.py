@@ -3,39 +3,17 @@ import config
 
 import random
 import numpy as np
-import pandas as pd
-pd.set_option('max_colwidth', 256)
-
-# +
-import matplotlib.pyplot as plt
-from IPython.display import set_matplotlib_formats
-
-# %matplotlib inline
-#hsun test
-import matplotlib_inline
-matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
-#plt.rcParams['figure.dpi']=150
-
-#set_matplotlib_formats('svg')
-# -
-
-
-
 import torch
 from torch import nn
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 
-# +
 import torchvision
 import torchvision.transforms as transforms
 import torchvision.transforms.functional as TF
 
 from torchvision import models
-# -
-
 from transformers import get_linear_schedule_with_warmup
-
 
 
 from tqdm import tqdm
@@ -44,9 +22,15 @@ from sklearn.metrics import classification_report
 from model import CustomModel
 from dataset import CustomDataset
 
+import pandas as pd
+pd.set_option('max_colwidth', 256)
 
-#hsun test
-#os.environ['CUDA_VISIBLE_DEVICES']='0'
+import matplotlib.pyplot as plt
+from IPython.display import set_matplotlib_formats
+
+import matplotlib_inline
+matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
+
 
 def set_seeds(seed):
     random.seed(seed)
@@ -56,8 +40,6 @@ def set_seeds(seed):
     torch.backends.cudnn.benchmark = False
 
 
-
-# +
 if __name__ == '__main__':
     opt = config.parse_opt()
     print(opt)
