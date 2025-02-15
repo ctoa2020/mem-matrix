@@ -1,91 +1,43 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-
-
-
 import pickle
-
-
-
-
-
 import random
-
 from pandas import read_csv
+import numpy as np
+import pandas as pd
+import csv
+import matplotlib
+import matplotlib.pyplot as plt
+from IPython.display import set_matplotlib_formats
+import matplotlib_inline
+import torch
+import torch.nn as nn
+from torch.nn import functional as F
+from torch.utils.data import Dataset
+import torchvision
+import torchvision.transforms as transforms
+import torchvision.transforms.functional as TF
+from torchvision import models
+from scipy.ndimage import zoom
+from tqdm import tqdm
+from sklearn.metrics import classification_report
+from model import CustomModel
+from dataset import CustomDataset
+import matplotlib.colors as colors
+from matplotlib.colors import TwoSlopeNorm
+import os
+
 
 random.seed(42)
-import numpy as np
 np.random.seed(42)
 
-import pandas as pd
 pd.set_option('display.max_rows', 512)
 pd.set_option('display.max_columns', 512)
 pd.set_option('display.max_colwidth', None)
 
-
-
-
-
-import csv
-
-
-
-
-
-import matplotlib
-import matplotlib.pyplot as plt
-from IPython.display import set_matplotlib_formats
-
-import matplotlib_inline
 matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
-
-
-import torch
-import torch.nn as nn
-from torch.nn import functional as F
-
-from torch.utils.data import Dataset
-
-
-
 
 torch.manual_seed(42)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-
-
-
-
-
-import torchvision
-import torchvision.transforms as transforms
-import torchvision.transforms.functional as TF
-
-from torchvision import models
-
-
-
-
-
-from scipy.ndimage import zoom
-
-
-
-
-from tqdm import tqdm
-
-
-
-from sklearn.metrics import classification_report
-
-
-
-from model import CustomModel
-from dataset import CustomDataset
-
-
-
 
 output_collections_list = []
 for idx in range(0, 5400+1, 1800):
@@ -129,8 +81,6 @@ df_0['theta'] = -(df_0['theta'].astype(float))
 df_0['attributions'] = -df_0['attributions']
 
 
-
-
 input_size = 224
 
 # transform_train = transforms.Compose([
@@ -145,8 +95,6 @@ transform_test = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 ])
-
-
 
 
 
@@ -170,19 +118,7 @@ def unnormalize(img, mean, std):
     return npimg
 
 
-
-
-import matplotlib.colors as colors
-from matplotlib.colors import TwoSlopeNorm
-import os
-
-
-
 idx_list = pd.read_csv('./data/cifar_mix_uni_0.csv')
-
-
-
-
 
 amp = idx_list.iloc[800:1200]
 
