@@ -7,9 +7,6 @@ CUDA_VISIBLE_DEVICES=1 python -u compute_mem.py --CHECKPOINT=42 --BETA=mix_nd0.2
 PIDS[1]=$!
 
 
-
-
-
 trap "kill ${PIDS[*]}" SIGINT
 
 wait
