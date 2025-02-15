@@ -1,76 +1,38 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
-
 import os
-
-
-
-
-
 import pickle
-
-#from cifar.Mixup import labels
-
-
-
-random_seed = 42
-
-
-
-
-
 import random
-random.seed(random_seed)
 import numpy as np
-np.random.seed(random_seed)
-
 import pandas as pd
-pd.set_option('display.max_rows', 512)
-pd.set_option('display.max_columns', 512)
-pd.set_option('display.max_colwidth', None)
-
-
-
-
+import torch
+import torch.nn as nn
+from torch.nn import functional as F
+from torch.utils.data import Dataset
+from tqdm import tqdm
+from sklearn.metrics import classification_report
+from scipy import stats
 import csv
-
-
-
-
 import matplotlib
 import matplotlib.pyplot as plt
 from IPython.display import set_matplotlib_formats
 import matplotlib_inline
 matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
 
+random_seed = 42
+random.seed(random_seed)
+np.random.seed(random_seed)
 
-
-
-import torch
-import torch.nn as nn
-from torch.nn import functional as F
-
-from torch.utils.data import Dataset
+pd.set_option('display.max_rows', 512)
+pd.set_option('display.max_columns', 512)
+pd.set_option('display.max_colwidth', None)
 
 
 
 torch.manual_seed(random_seed)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-
-
-
-from tqdm import tqdm
-
-
-
-from sklearn.metrics import classification_report
-
-
-
-from scipy import stats
 
 
 
