@@ -2,24 +2,26 @@ import matplotlib
 import matplotlib.pyplot as plt
 import pickle
 import random
-
 from scipy.ndimage import zoom
 from torchvision.transforms.v2.functional import to_pil_image
-
-random.seed(42)
 import numpy as np
-np.random.seed(42)
 import pandas as pd
 import torch
 import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import Dataset
+import matplotlib_inline
+from matplotlib.colors import TwoSlopeNorm
+
+
+random.seed(42)
+
+np.random.seed(42)
 
 torch.manual_seed(42)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
-import matplotlib_inline
 matplotlib_inline.backend_inline.set_matplotlib_formats('svg')
 
 #while True:
@@ -85,12 +87,6 @@ def unnormalize(img, mean, std):
     return npimg
 
 
-from matplotlib.colors import TwoSlopeNorm
-
-
-
-#import cv2
-#from numpy import asarray
 
 #search picture
 fig = plt.figure(figsize=(16, 4))
